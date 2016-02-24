@@ -47,10 +47,14 @@ end
 	Desc: return true if we should draw the named element
 -----------------------------------------------------------]]
 function GM:HUDShouldDraw( name )
+	-- To prevent GetObserverTarget from erroring
+	if ( !IsValid( LocalPlayer() ) ) then
+		return true
+	end
 
 	-- Allow the weapon to override this
-	local ply = LocalPlayer()
-	if ( IsValid( ply ) ) then
+	local ply = IsValid( LocalPlayer():GetObserverTarget() ) && LocalPlayer():GetObserverTarget() || LocalPlayer()
+	if ( IsValid( ply ) && ( ply:IsPlayer() || ply:IsNPC() ) ) then
 
 		local wep = ply:GetActiveWeapon()
 
